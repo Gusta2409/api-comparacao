@@ -1,0 +1,35 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    default: kafka
+  application:
+    name: api-comparacao
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVIDORES:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        delivery.timeout.ms: 10000
+        request.timeout.ms: 5000
+        max.block.ms: 5000
+    consumer:
+      group-id: api-comparacao
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  datasource:
+    url: ${BANCO_URL:jdbc:sqlserver://localhost:1433;databaseName=COMPARADOR_PRECO;encrypt=true;trustServerCertificate=true}
+    username: ${BANCO_USUARIO:}
+    password: ${SENHA_SQLSERVER:}
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate.jdbc.time_zone: UTC
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+busca:
+  url: ${BUSCA_URL:http://localhost:8081}
